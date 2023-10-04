@@ -1,11 +1,13 @@
-# Project Overview:
+# ALX - Capstone Project
 
-# Features and Functionality:
+## Project Overview:
 
-# Technologies Used:
+## Features and Functionality:
 
-# Screenshots or Demo:
+## Technologies Used:
 
-# Roadmap and future enhancements:
+## Screenshots or Demo:
 
-# Contact information:
+## Roadmap and future enhancements:
+
+## Contact information:
