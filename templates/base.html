@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css')}}"
+    />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">
+          <p class="logo-title">BlogIT</p>
+        </div>
+        <div class="nav-middle">
+          <a href="/">Home</a>
+          <a href="/addpost">Create</a>
+          <a href="/search">Search</a>
+        </div>
+        <div class="nav-side">
+          {% if current_user.is_authenticated %}
+          <a href="/logout">Log out</a> {% else %}
+          <a href="/login">Log in</a>
+          {% endif %}
+          <a href="/profile">
+            <img
+              class="prof-icon"
+              src="{{ url_for('static', filename='img/prof.jpg')}}"
+            />
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="all-content">
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'success' %}
+      <div class="flash-message-success">
+        <p>{{message}}</p>
+        <a href="">
+          <button class="close">X</button>
+        </a>
+      </div>
+      {% else %}
+      <div class="flash-message-error">
+        <p>{{message}}</p>
+        <a href="">
+          <button class="close">X</button>
+        </a>
+      </div>
+      {% endif %} {% endfor %} {% endif %} {% endwith %} {% block body %} {%
+      endblock %}
+      <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    </div>
+  </body>
+</html>

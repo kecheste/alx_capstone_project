@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block head %}
+<title>Create Blog</title>
+{% endblock %} {% block body %}
+<div class="post-container">
+  <div
+    style="background-image: url('{{url_for('static', filename='img/money.jpg')}}')"
+    class="post-bg"
+  >
+    <div class="post-content">
+      <div class="post-header">
+        <h1>{{ post.title }}</h1>
+        <p class="subtitle">{{post.subtitle}}</p>
+        <a href="/profile">
+          <p class="date">
+            Posted by: {{user.username.capitalize()}} on {{ date_posted }}
+          </p>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="post-article">
+    <div class="article-container">
+      <p class="post-text">{{post.content}}</p>
+      <img class="post-image" src="/static/img/{{post.image}}" alt="" />
+      <div class="post-footer">
+        <div class="post-stats">
+          <p class="stat">{{ post.date_created.strftime('%d %B') }}</p>
+          <p class="stat">{{post.num_read}} read</p>
+        </div>
+        <div class="post-actions">
+          <a href="#">
+            <img src="{{ url_for('static', filename='img/like.png')}}" alt="" />
+          </a>
+          <a href="#">
+            <img
+              src="{{ url_for('static', filename='img/comment.png')}}"
+              alt=""
+            />
+          </a>
+          <a href="#">
+            <img
+              src="{{ url_for('static', filename='img/share.png')}}"
+              alt=""
+            />
+          </a>
+          {% if current_user.id == post.author %}
+          <a href="/post/{{post.id}}/delete">
+            <img
+              src="{{ url_for('static', filename='img/delete.png')}}"
+              alt=""
+            />
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

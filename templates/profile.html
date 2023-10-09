@@ -1,0 +1,84 @@
+{% extends 'base.html' %} {% block head %}
+<title>Blog Here</title>
+{% endblock %} {% block body %}
+<div class="profile-container">
+  <div class="profile-content">
+    <div class="profile-content-header">
+      <h2 class="profile-name">{{ current_user.username.capitalize() }}!</h2>
+      <button class="edit-profile">Edit profile</button>
+    </div>
+    <div class="profile-content-main">
+      <div class="left">
+        <img
+          class="profile-image"
+          src="{{ url_for('static', filename='img/prof.jpg')}}"
+          alt=""
+        />
+        <p>Username: {{ current_user.username }}</p>
+        <p>Email: {{ current_user.email }}</p>
+        <p class="profile-views">{{current_user.prof_views}} profile views</p>
+      </div>
+      <div class="right">
+        <p>My blogs:</p>
+        <ul>
+          {% for post in posts %} {% if post.author == current_user.id %}
+          <li><a href="/post/{{post.id}}"> {{ post.title }} </a></li>
+          {% endif %} {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="edit-profile-form">
+  <button class="open-close">X</button>
+  <form
+    action="/update-profile/{{current_user.id}}"
+    method="post"
+    class="form-prof"
+  >
+    <h2>Edit your profile...</h2>
+    <div class="form-control">
+      <label for="username">Username</label>
+      <input
+        name="username"
+        value="{{ current_user.username }}"
+        type="text"
+        id="username"
+        required
+      />
+    </div>
+    <div class="form-control">
+      <label for="email">Email</label>
+      <input
+        name="email"
+        value="{{ current_user.email }}"
+        type="email"
+        id="email"
+        required
+      />
+    </div>
+    <div class="form-control">
+      <label for="password">Current Password</label>
+      <input
+        name="password"
+        placeholder="Enter current password..."
+        type="password"
+        id="password"
+        required
+      />
+    </div>
+    <div class="form-control">
+      <label for="password1">New Password</label>
+      <input
+        name="password1"
+        placeholder="Enter new password..."
+        type="password"
+        id="password1"
+        required
+      />
+    </div>
+    <button type="submit">Update profile</button>
+  </form>
+</div>
+
+{% endblock %}

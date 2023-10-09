@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block head %}
+<title>Blog Here</title>
+{% endblock %} {% block body %}
+<div class="container">
+  <div class="content">
+    <div class="welcome">
+      <h1>Welcome to our blog</h1>
+      <p>
+        Stay updated with the newest stories, case studies and insights shared
+        by everyone.
+      </p>
+      <a href="/addpost">
+        <button type="submit">Create Post</button>
+      </a>
+    </div>
+  </div>
+</div>
+<div class="blog-container">
+  <div class="blogs">
+    {% for post in posts %}{% if post %}
+    <a href="post/{{post.id}}">
+      <div class="blog">
+        <img src="static/img/{{post.image}}" />
+        <h2 class="blog-title">{{post.title}}</h2>
+        <h3 class="sub-title">{{post.subtitle}}</h3>
+        <p class="blog-content">
+          {{ ' '.join(post.content.strip().split(' ')[:30])}}...
+        </p>
+        <div class="blog-footer">
+          <div class="blog-stats">
+            <p>{{ post.date_created.strftime('%d %B') }}</p>
+            <p>{{post.num_read}} read</p>
+          </div>
+          <div class="blog-actions">
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='img/like.png')}}"
+                alt=""
+              />
+            </a>
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='img/comment.png')}}"
+                alt=""
+              />
+            </a>
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='img/share.png')}}"
+                alt=""
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </a>
+    {% endif %} {% endfor %}
+  </div>
+</div>
+{% endblock %}
