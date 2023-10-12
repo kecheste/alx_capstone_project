@@ -136,3 +136,20 @@ body {
 .form-group button:hover {
   background-color: rgb(95, 2, 183);
 }
+@media screen and (max-width: 1000px) {
+  .flash-message-error {
+    display: none;
+  }
+  .flash-message-success {
+    display: none;
+  }
+  .container {
+    width: 90%;
+    padding-top: 40px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .card {
+    box-shadow: 0 0 0 0;
+  }
+}

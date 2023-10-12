@@ -21,7 +21,7 @@
   <div class="post-article">
     <div class="article-container">
       <p class="post-text">{{post.content}}</p>
-      <img class="post-image" src="/static/img/{{post.image}}" alt="" />
+      <img class="post-image" src="{{post.image}}" alt="" />
       <div class="post-footer">
         <div class="post-stats">
           <p class="stat">{{ post.date_created.strftime('%d %B') }}</p>
@@ -73,11 +73,7 @@
         {% for comment in post.comments %}
         <div class="comments-contain">
           {% if comment.user.prof_image %}
-          <img
-            class="comment-image"
-            src="/static/img/{{comment.user.prof_image}}"
-            alt=""
-          />
+          <img class="comment-image" src="{{comment.user.prof_image}}" alt="" />
           {% else %}
           <img class="comment-image" src="/static/img/user.png" alt="" />
           {% endif %}

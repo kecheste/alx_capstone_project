@@ -12,11 +12,8 @@
     <div class="profile-content-main">
       <div class="left">
         {% if current_user.prof_image %}
-        <img
-          class="profile-image"
-          src="/static/img/{{current_user.prof_image}}"
-          alt=""
-        />{% else %}
+        <img class="profile-image" src="{{current_user.prof_image}}" alt="" />{%
+        else %}
         <img
           class="profile-image"
           src="{{ url_for('static', filename='img/no_prof.jpg')}}"

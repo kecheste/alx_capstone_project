@@ -20,7 +20,7 @@
     {% for post in posts %}{% if post %}
     <a href="post/{{post.id}}">
       <div class="blog">
-        <img src="static/img/{{post.image}}" />
+        <img src="{{post.image}}" />
         <h2 class="blog-title">{{post.title}}</h2>
         <h3 class="sub-title">{{post.subtitle}}</h3>
         <p class="blog-content">
