@@ -5,7 +5,7 @@
   <div id="form-main">
     <div id="form-div">
       <form
-        action="{{url_for('addpost')}}"
+        action="/post/{{post.id}}/edit"
         method="post"
         class="form"
         id="form"
@@ -14,6 +14,7 @@
         <p class="name">
           <input
             name="title"
+            value="{{post.title}}"
             type="text"
             class="feedback-input"
             placeholder="Enter title..."
@@ -21,13 +22,10 @@
             required
           />
         </p>
-        <p class="name">
-          <input class="feedback-input" type="file" name="image" required />
-        </p>
-
         <p class="tags">
           <input
             name="subtitle"
+            value="{{post.subtitle}}"
             type="text"
             class="feedback-input"
             id="tags"
@@ -44,11 +42,13 @@
             placeholder="Content here..."
             rows="4"
             required
-          ></textarea>
+          >
+{{post.content}}</textarea
+          >
         </p>
 
         <div class="submit">
-          <input type="submit" value="Create Blog" id="button-blue" />
+          <input type="submit" value="Update Blog" id="button-blue" />
         </div>
       </form>
     </div>

@@ -2,8 +2,44 @@
 <title>Blog Here</title>
 {% endblock %} {% block body %}
 
-<div class="content">
-  <h2>About content</h2>
+<div onclick="hideMenu()" class="search-container">
+  <div class="search-all">
+    <div class="search-content">
+      <form action="/search" method="post" class="search-form">
+        <input
+          name="query"
+          id="search"
+          type="search"
+          placeholder="Search blogs..."
+          autofocus
+          required
+        />
+        <button class="go" type="submit">Go</button>
+      </form>
+    </div>
+    {% if results %}
+    <div class="search-results">
+      {% for result in results %}
+      <div class="result">
+        <div class="result-tech">
+          <a href="/post/{{result.id}}">
+            <h3>{{' '.join(result.title.strip().split(' ')[:4])}}...</h3>
+            <p class="cont">
+              {{' '.join(result.content.strip().split(' ')[:12])}}...
+            </p>
+          </a>
+        </div>
+        <div class="result-img">
+          {% if result.image %}
+          <img src="/static/img/{{result.image}}" alt="" />
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="search-results">No result was found!</div>
+    {% endif %}
+  </div>
 </div>
-
 {% endblock %}

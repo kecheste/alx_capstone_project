@@ -4,16 +4,25 @@
 <div class="profile-container">
   <div class="profile-content">
     <div class="profile-content-header">
-      <h2 class="profile-name">{{ current_user.username.capitalize() }}!</h2>
+      <h2 class="profile-name">
+        Hi, {{ current_user.username.capitalize() }}!
+      </h2>
       <button class="edit-profile">Edit profile</button>
     </div>
     <div class="profile-content-main">
       <div class="left">
+        {% if current_user.prof_image %}
         <img
           class="profile-image"
-          src="{{ url_for('static', filename='img/prof.jpg')}}"
+          src="/static/img/{{current_user.prof_image}}"
+          alt=""
+        />{% else %}
+        <img
+          class="profile-image"
+          src="{{ url_for('static', filename='img/no_prof.jpg')}}"
           alt=""
         />
+        {% endif %}
         <p>Username: {{ current_user.username }}</p>
         <p>Email: {{ current_user.email }}</p>
         <p class="profile-views">{{current_user.prof_views}} profile views</p>
@@ -35,6 +44,7 @@
     action="/update-profile/{{current_user.id}}"
     method="post"
     class="form-prof"
+    enctype="multipart/form-data"
   >
     <h2>Edit your profile...</h2>
     <div class="form-control">
@@ -56,6 +66,10 @@
         id="email"
         required
       />
+    </div>
+    <div class="form-control">
+      <label for="image">Profile Image</label>
+      <input name="image" type="file" id="image" required />
     </div>
     <div class="form-control">
       <label for="password">Current Password</label>

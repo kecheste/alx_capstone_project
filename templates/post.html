@@ -29,9 +29,6 @@
         </div>
         <div class="post-actions">
           <a href="#">
-            <img src="{{ url_for('static', filename='img/like.png')}}" alt="" />
-          </a>
-          <a href="#">
             <img
               src="{{ url_for('static', filename='img/comment.png')}}"
               alt=""
@@ -44,6 +41,10 @@
             />
           </a>
           {% if current_user.id == post.author %}
+          <a href="/post/{{post.id}}/edit">
+            <img src="{{ url_for('static', filename='img/edit.png')}}" alt="" />
+          </a>
+          {% endif %} {% if current_user.id == post.author %}
           <a href="/post/{{post.id}}/delete">
             <img
               src="{{ url_for('static', filename='img/delete.png')}}"
@@ -52,6 +53,53 @@
           </a>
           {% endif %}
         </div>
+      </div>
+      <div id="commentsContainer" class="comments-container">
+        <h2>Comments</h2>
+        <div class="container-header">
+          <div class="comment-form">
+            <input
+              name="comment"
+              type="text"
+              placeholder="Add your comment..."
+              required
+              id="commentText"
+            />
+            <button onclick="addComment({{post.id}})" type="submit">
+              Comment
+            </button>
+          </div>
+        </div>
+        {% for comment in post.comments %}
+        <div class="comments-contain">
+          {% if comment.user.prof_image %}
+          <img
+            class="comment-image"
+            src="/static/img/{{comment.user.prof_image}}"
+            alt=""
+          />
+          {% else %}
+          <img class="comment-image" src="/static/img/user.png" alt="" />
+          {% endif %}
+          <div class="comments-content">
+            <div class="comment-header">
+              <h3>{{ comment.user.username }}</h3>
+              <h4>{{ comment.date_created.strftime('%d %B, %Y') }}</h4>
+            </div>
+            <div class="comment-body">
+              <p>{{comment.content}}</p>
+              {% if comment.author == current_user.id %}
+              <a href="/post/{{post.id}}/comment/{{comment.id}}/delete">
+                <img
+                  src="{{ url_for('static', filename='img/delete.png')}}"
+                  alt=""
+                />
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </div>

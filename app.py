@@ -30,8 +30,16 @@ class Blogs(db.Model):
     image = db.Column(db.String(255))
     author = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     num_read=db.Column(db.Integer, default=0)
-    date_created = db.Column(db.DateTime(), default=datetime.utcnow())    
+    date_created = db.Column(db.DateTime(), default=datetime.utcnow())
+    comments=db.relationship('Comments', backref='blogs',
+    passive_deletes=True)
 
+class Comments(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(255), nullable=False)
+    date_created = db.Column(db.DateTime(), default=datetime.utcnow())
+    author = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('blogs.id', ondelete='CASCADE'), nullable=False)
 
 class Users(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -42,7 +50,10 @@ class Users(UserMixin, db.Model):
     date_created = db.Column(db.DateTime(), default=datetime.utcnow())
     posts=db.relationship('Blogs', backref='user',
     passive_deletes=True)
-    prof_views=db.Column(db.Integer)
+    comments=db.relationship('Comments', backref='user',
+    passive_deletes=True)
+    prof_views=db.Column(db.Integer, default=0)
+    prof_image=db.Column(db.String(100), nullable=True)
 
     def __init__(self, email, password, username):
         self.email = email
@@ -58,32 +69,43 @@ def index():
     return render_template('index.html', posts=posts)
 
 @app.route('/update-profile/<int:user_id>', methods=['POST', 'GET'])
+@login_required
 def update_profile(user_id):
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         password1 = request.form['password1']
+        file=request.files['image']
+
+        if file.filename == '':
+            flash('No image selected for uploading..', category='error')
+            return render_template('create_post.html')
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         user = Users.query.filter_by(id=user_id).first()
 
         if current_user.id != user.id:
             flash('You do not have permission!', category='error')
+        elif len(password1) < 6:
+            flash('Password is too short!', category='error')
         elif len(password) < 6:
             flash('Password is too short!', category='error')
         elif len(username) < 6:
             flash('Username is too short!', category='error')
-        elif password1 != password:
-            flash('The two passwords do not much!', category='error')
-        
+        elif password1 == user.password:
+            flash('Please try different password!', category='error')
         user.username = username
         user.email = email
-        user.password = generate_password_hash(password,method='sha256')
+        user.password = generate_password_hash(password1,method='sha256')
+        user.prof_image=filename
         db.session.commit()
         flash('Profile updated!', category='success')
         return redirect(url_for('profile'))
+    
     return redirect(url_for('profile'))
-
 
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -173,6 +195,38 @@ def addpost():
     
     return render_template('create_post.html')
 
+@app.route('/post/<int:post_id>/addComment/<comment>', methods=['POST'])
+@login_required
+def add_comment(post_id,comment):
+    post = Blogs.query.filter_by(id = post_id).one()
+    if post:
+        new_comment = Comments(content=comment,author=current_user.id,post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        return jsonify({"author": current_user.id, "image": new_comment.user.prof_image, 'username': new_comment.user.username, 'date_created': new_comment.date_created.strftime('%d %B, %Y'), 'content': comment, 'comment_id': new_comment.id})
+    return jsonify({'error': 'Post does not exist!'}, 400)
+
+@app.route('/post/<int:post_id>/edit', methods=['GET','POST'])
+@login_required
+def edit_post(post_id):
+    post = Blogs.query.filter_by(id = post_id).one()
+    if request.method == 'POST':        
+        if post:
+            if current_user.id == post.author:
+                title = request.form['title']
+                subtitle = request.form['subtitle']
+                content = request.form['content']
+                post.title = title
+                post.subtitle = subtitle
+                post.content = content
+                db.session.commit()
+                flash('Post updated!', category='success')
+                return redirect('/post/{}'.format(post.id))
+            flash('You do not have permission', category='error')
+        flash('We can not find that particular post!', category='error')
+
+    return render_template('edit_post.html', post=post)
+
 @app.route('/post/<int:post_id>/delete')
 @login_required
 def delete_post(post_id):
@@ -190,6 +244,20 @@ def delete_post(post_id):
         flash('Post does not exist!', category='error')
         return redirect(url_for('index'))
 
+@app.route('/post/<int:post_id>/comment/<int:comment_id>/delete')
+@login_required
+def delete_comment(post_id,comment_id):
+    current_post = Blogs.query.filter_by(id=post_id).one()
+    current_comment = Comments.query.filter_by(id=comment_id).one()
+    if current_comment:
+        if current_comment.post_id == current_post.id:
+            if current_comment.author == current_user.id:
+                db.session.delete(current_comment)
+                db.session.commit()
+                return redirect('/post/{}'.format(current_post.id))
+            flash('You do not have permission', category='error')
+    return redirect('/post/{}'.format(current_post.id))
+
 @app.route('/post/<int:post_id>')
 def post(post_id):
     post = Blogs.query.filter_by(id = post_id).one()
@@ -200,8 +268,14 @@ def post(post_id):
     user = Users.query.filter_by(id=user_id).one()
     return render_template('post.html', post=post, date_posted=date_posted, user=user)
 
-@app.route('/search')
+@app.route('/search', methods=['GET','POST'])
 def about():
+    if request.method == 'POST':
+        query = request.form['query']
+        if not query:
+            flash('Please add query!', category='error')
+        results = Blogs.query.filter(Blogs.title.like("%"+query+"%")).all()
+        return render_template('search.html', results=results)
     return render_template('search.html')
 
 @app.route('/logout')

@@ -19,22 +19,74 @@
           <a href="/">Home</a>
           <a href="/addpost">Create</a>
           <a href="/search">Search</a>
+          <img onclick="showMenu()" src="/static/img/menu.png" alt="" />
         </div>
         <div class="nav-side">
           {% if current_user.is_authenticated %}
-          <a href="/logout">Log out</a> {% else %}
-          <a href="/login">Log in</a>
-          {% endif %}
+          <a href="/logout">Log out</a>
+          {% if current_user.prof_image %}
           <a href="/profile">
             <img
               class="prof-icon"
-              src="{{ url_for('static', filename='img/prof.jpg')}}"
+              src="/static/img/{{current_user.prof_image}}"
+            /> </a
+          >{% else%}
+          <a href="/profile">
+            <img
+              class="prof-icon"
+              src="{{ url_for('static', filename='img/user.png')}}"
             />
           </a>
+          {% endif %} {% else %}
+          <a href="/login">Log in</a>
+          <a href="/profile">
+            <img
+              class="prof-icon"
+              src="{{ url_for('static', filename='img/user.png')}}"
+            />
+          </a>
+          {% endif %}
         </div>
       </div>
     </nav>
-    <div class="all-content">
+    <div class="expandable">
+      <div class="nav-expand">
+        <div class="mobile-options">
+          <div class="mobile">
+            <a href="/">Home</a>
+            <a href="/addpost">Create</a>
+            <a href="/search">Search</a>
+          </div>
+        </div>
+        <div class="laptop-options">
+          {% if current_user.is_authenticated %}
+          <a href="/logout">Log out</a>
+          {% if current_user.prof_image %}
+          <a href="/profile">
+            <img
+              class="prof-icon"
+              src="/static/img/{{current_user.prof_image}}"
+            /> </a
+          >{% else%}
+          <a href="/profile">
+            <img
+              class="prof-icon"
+              src="{{ url_for('static', filename='img/user.png')}}"
+            />
+          </a>
+          {% endif %} {% else %}
+          <a href="/login">Log in</a>
+          <a href="/profile">
+            <img
+              class="prof-icon"
+              src="{{ url_for('static', filename='img/user.png')}}"
+            />
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="all-content" onclick="hideMenu()">
       {% with messages = get_flashed_messages(with_categories=True) %} {% if
       messages %} {% for category, message in messages %} {% if category ==
       'success' %}

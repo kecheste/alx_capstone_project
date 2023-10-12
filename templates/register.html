@@ -1,21 +1,21 @@
 {% extends 'user.html' %} {% block head %}
 <title>Register</title>
 {% endblock %} {% block body %}
-<section class="ftco-section">
+<section class="main-section">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-5">
+    <div class="card">
+      <div class="card-container">
         <div class="login-wrap p-4 p-md-5">
-          <div class="icon d-flex align-items-center justify-content-center">
+          <div class="card-icon">
             <span class="fa fa-user-o"></span>
           </div>
-          <h3 class="text-center mb-4">New here?</h3>
+          <h3 class="card-title">New here?</h3>
           <form action="/register" method="post" class="login-form">
             <div class="form-group">
               <input
                 name="username"
                 type="text"
-                class="form-control rounded-left"
+                class="form-control"
                 placeholder="Username"
                 required
               />
@@ -24,21 +24,21 @@
               <input
                 name="email"
                 type="text"
-                class="form-control rounded-left"
+                class="form-control"
                 placeholder="Email"
                 required
               />
             </div>
-            <div class="form-group d-flex">
+            <div class="form-group">
               <input
                 name="password"
                 type="password"
-                class="form-control rounded-left"
+                class="form-control"
                 placeholder="Password"
                 required
               />
             </div>
-            <div class="form-group d-md-flex">
+            <div class="form-group-below-reg">
               <div class="w-50">
                 <label class="checkbox-wrap checkbox-primary"
                   >Remember Me
@@ -46,7 +46,7 @@
                   <span class="checkmark"></span>
                 </label>
               </div>
-              <div class="w-50 text-md-right">
+              <div class="w-50">
                 <a href="login">Login</a>
               </div>
             </div>
