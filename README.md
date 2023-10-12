@@ -25,13 +25,13 @@
 	- Cloudinary: Image upload and storage
 
 ## Screenshots or Demo:
-[Login](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093855/Screenshot_189_ageitj.png)
-[Homepage](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_191_txx4p4.png)
-[Post-view](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093859/Screenshot_192_gmpn7k.png)
-[Create-post](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_197_k3khnr.png)
-[Search-post](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093857/Screenshot_198_ybhhmq.png)
-[Post-comments](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093857/Screenshot_194_lsp4wi.png)
-[Profile](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_195_jc3toy.png)
+[Login](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093855/Screenshot_189_ageitj.png) \n
+[Homepage](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_191_txx4p4.png) \n
+[Post-view](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093859/Screenshot_192_gmpn7k.png) \n
+[Create-post](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_197_k3khnr.png) \n
+[Search-post](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093857/Screenshot_198_ybhhmq.png) \n
+[Post-comments](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093857/Screenshot_194_lsp4wi.png) \n
+[Profile](https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_195_jc3toy.png) \n
 
 ## Roadmap and future enhancements:
 
