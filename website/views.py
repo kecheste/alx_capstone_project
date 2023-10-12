@@ -4,11 +4,12 @@ from . import db
 from .models import Blogs, Users, Comments
 import cloudinary
 import cloudinary.uploader
+from flask import current_app as app
 
 cloudinary.config(
-    cloud_name='dtnpzejau',
-    api_key='929255571337462',
-    api_secret='QffXKMDkza0YqtzyJJKu8YNKDCk'
+    cloud_name= app.config['CLOUD_NAME'],
+    api_key=app.config['API_KEY'],
+    api_secret=app.config['API_SECRET']
 )
 
 views = Blueprint('views', __name__)
