@@ -22,8 +22,15 @@
     - SQLAlchemy: Python SQL Toolkit
     - JavaScript: Creating pop-ups and dinamic update
     - Git: Version control
+	- Cloudinary: Image upload and storage
 
 ## Screenshots or Demo:
+	- https://res.cloudinary.com/dtnpzejau/image/upload/v1697093855/Screenshot_189_ageitj.png
+	- https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_191_txx4p4.png
+	- https://res.cloudinary.com/dtnpzejau/image/upload/v1697093859/Screenshot_192_gmpn7k.png
+	- https://res.cloudinary.com/dtnpzejau/image/upload/v1697093858/Screenshot_197_k3khnr.png
+	- https://res.cloudinary.com/dtnpzejau/image/upload/v1697093857/Screenshot_198_ybhhmq.png
+	- https://res.cloudinary.com/dtnpzejau/image/upload/v1697093857/Screenshot_194_lsp4wi.png
 
 ## Roadmap and future enhancements:
 
