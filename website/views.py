@@ -41,24 +41,29 @@ def addpost():
             return render_template('create_post.html')
         if file:
             response = cloudinary.uploader.upload(file)
+        try:
+            blogpost = Blogs(title=title, subtitle=subtitle, content=content, image=response['url'], author=author)
+            db.session.add(blogpost)
+            db.session.commit()
+            flash('Blog created successfully!', category='success')
+            return redirect(url_for('views.index'))
+        except:
+            return 'Something went wrong!' 
 
-        blogpost = Blogs(title=title, subtitle=subtitle, content=content, image=response['url'], author=author)
-        db.session.add(blogpost)
-        db.session.commit()
-        flash('Blog created successfully!', category='success')
-        return redirect(url_for('views.index'))
-    
     return render_template('create_post.html')
 
 @views.route('/post/<int:post_id>')
 def post(post_id):
-    post = Blogs.query.filter_by(id = post_id).one()
-    date_posted = post.date_created.strftime('%d %B, %Y')
-    post.num_read += 1
-    db.session.commit()
-    user_id = post.author
-    user = Users.query.filter_by(id=user_id).one()
-    return render_template('post.html', post=post, date_posted=date_posted, user=user)
+    try:
+        post = Blogs.query.filter_by(id = post_id).one()
+        date_posted = post.date_created.strftime('%d %B, %Y')
+        post.num_read += 1
+        db.session.commit()
+        user_id = post.author
+        user = Users.query.filter_by(id=user_id).one()
+        return render_template('post.html', post=post, date_posted=date_posted, user=user)
+    except:
+        return 'Something went wrong!'
 
 @views.route('/search', methods=['GET','POST'])
 def about():
@@ -66,8 +71,11 @@ def about():
         query = request.form['query']
         if not query:
             flash('Please add query!', category='error')
-        results = Blogs.query.filter(Blogs.title.like("%"+query+"%")).all()
-        return render_template('search.html', results=results)
+        try:
+            results = Blogs.query.filter(Blogs.title.like("%"+query+"%")).all()
+            return render_template('search.html', results=results)
+        except:
+            return 'Something went wrong!'
     return render_template('search.html')
 
 @views.route('/post/<int:post_id>/edit', methods=['GET','POST'])

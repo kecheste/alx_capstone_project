@@ -7,6 +7,9 @@ from .models import Users, Blogs
 import cloudinary
 import cloudinary.uploader
 from flask import current_app as app
+from flask_mail import Mail, Message
+
+mail = Mail(app)
 
 cloudinary.config(
     cloud_name= app.config['CLOUD_NAME'],
@@ -22,7 +25,10 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        user = Users.query.filter_by(username=username).first()
+        try:
+            user = Users.query.filter_by(username=username).first()
+        except:
+            user = None
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in!', category='success')
@@ -42,9 +48,11 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        user_exists = Users.query.filter_by(username=username).first()
-        email_exists = Users.query.filter_by(email=email).first()
-
+        try:
+            user_exists = Users.query.filter_by(username=username).first()
+            email_exists = Users.query.filter_by(email=email).first()
+        except Exception as e:
+            return 'Error occured: {}'.format(e)
         if user_exists:
             flash('Username is already taken!', category='error')
         elif email_exists:
@@ -56,22 +64,28 @@ def register():
 
         hash_pwd = generate_password_hash(password, method='sha256')
         
-        user = Users(email=email,username=username,password=hash_pwd)
-        db.session.add(user)
-        db.session.commit()
-        login_user(user)
-        flash('User created.', category='success')
-        return redirect(url_for('views.index'))
+        try:
+            user = Users(email=email,username=username,password=hash_pwd)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            flash('User created.', category='success')
+            return redirect(url_for('views.index'))
+        except:
+            return 'Something went wrong!'
     
     return render_template('register.html')
 
 @auth.route('/profile')
 @login_required
 def profile():
-    posts = Blogs.query.all()
-    current_user.prof_views += 1
-    db.session.commit()
-    return render_template('profile.html', current_user=current_user, posts=posts)
+    try:
+        posts = Blogs.query.all()
+        current_user.prof_views += 1
+        db.session.commit()
+        return render_template('profile.html', current_user=current_user, posts=posts)
+    except:
+        return 'Something went wrong!'
 
 @auth.route('/update-profile/<int:user_id>', methods=['POST', 'GET'])
 @login_required
@@ -88,9 +102,11 @@ def update_profile(user_id):
             return render_template('create_post.html')
         if file:
             response = cloudinary.uploader.upload(file)
-
-        user = Users.query.filter_by(id=user_id).first()
-
+        try:
+            user = Users.query.filter_by(id=user_id).first()
+        except:
+            return 'Something went wrong!'
+        
         if current_user.id != user.id:
             flash('You do not have permission!', category='error')
         elif len(password1) < 6:
@@ -110,6 +126,18 @@ def update_profile(user_id):
         return redirect(url_for('auth.profile'))
     
     return redirect(url_for('auth.profile'))
+
+@auth.route('/reset_request', methods=['GET','POST'])
+def reset_request():
+    if request.method == 'POST':
+        email = request.form['email']
+        if email:
+            msg = Message('HEY', sender='noreply@blogit.com', recipients=[email], )
+            msg.body = 'HEY how are you?'
+            mail.send(msg)
+            return 'Sent email!'
+        return 'Please provide your email.'
+    return render_template('reset_request.html')
 
 @auth.route('/logout')
 @login_required

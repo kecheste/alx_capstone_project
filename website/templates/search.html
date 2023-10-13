@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block head %}
-<title>Blog Here</title>
+<title>Search</title>
 {% endblock %} {% block body %}
 
 <div onclick="hideMenu()" class="search-container">
@@ -31,7 +31,7 @@
         </div>
         <div class="result-img">
           {% if result.image %}
-          <img src="/static/img/{{result.image}}" alt="" />
+          <img src="{{result.image}}" alt="" />
           {% endif %}
         </div>
       </div>

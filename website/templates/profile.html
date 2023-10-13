@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block head %}
-<title>Blog Here</title>
+<title>{{ current_user.username.capitalize() }}</title>
 {% endblock %} {% block body %}
 <div class="profile-container">
   <div class="profile-content">

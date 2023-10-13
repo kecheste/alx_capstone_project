@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from datetime import datetime
+from flask import current_app
 
 class Blogs(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block head %}
-<title>Create Blog</title>
+<title>{{post.title}}</title>
 {% endblock %} {% block body %}
 <div class="post-container">
   <div
-    style="background-image: url('{{url_for('static', filename='img/money.jpg')}}')"
+    style="background-image: url({{post.image}}); background-position: center;"
     class="post-bg"
   >
     <div class="post-content">
@@ -21,7 +21,6 @@
   <div class="post-article">
     <div class="article-container">
       <p class="post-text">{{post.content}}</p>
-      <img class="post-image" src="{{post.image}}" alt="" />
       <div class="post-footer">
         <div class="post-stats">
           <p class="stat">{{ post.date_created.strftime('%d %B') }}</p>
